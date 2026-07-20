@@ -7,8 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://s3.tradingview.com/tv.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         /* ───────────── ROOT (Dark Theme) ───────────── */
         :root {
@@ -64,6 +63,82 @@
             min-height: 100vh;
             overflow-x: hidden;
             transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* ───────────── PAGE LOADER ───────────── */
+        .page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .page-loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-spinner {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin-bottom: 25px;
+        }
+
+        .loader-spinner .ring {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: var(--accent);
+            border-bottom-color: var(--accent-secondary);
+            animation: spin-ring 1s linear infinite;
+        }
+
+        .loader-spinner .ring:nth-child(2) {
+            width: 70%;
+            height: 70%;
+            top: 15%;
+            left: 15%;
+            border-top-color: var(--accent-secondary);
+            border-bottom-color: var(--accent);
+            animation-duration: 1.4s;
+            animation-direction: reverse;
+        }
+
+        .loader-spinner .ring:nth-child(3) {
+            width: 50%;
+            height: 50%;
+            top: 25%;
+            left: 25%;
+            border-top-color: var(--text-secondary);
+            border-bottom-color: var(--accent);
+            animation-duration: 1.8s;
+        }
+
+        @keyframes spin-ring {
+            to { transform: rotate(360deg); }
+        }
+
+        .loader-brand {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--text-primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-top: 10px;
         }
 
         .container {
@@ -1729,6 +1804,18 @@
 </head>
 <body>
 
+    <!-- ════════════════════════════════════════════════════════════ -->
+    <!-- 🔄 PAGE LOADER -->
+    <!-- ════════════════════════════════════════════════════════════ -->
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-spinner">
+            <div class="ring"></div>
+            <div class="ring"></div>
+            <div class="ring"></div>
+        </div>
+        <div class="loader-brand">BeyondCrypto</div>
+    </div>
+
     <div class="container" id="app">
 
         <!-- ════════════════════════════════════════════════════════════ -->
@@ -2365,7 +2452,7 @@
         // ════════════════════════════════════════════════════════════════
         // 🔧 CONFIGURATION – Edit this to control behavior
         // ════════════════════════════════════════════════════════════════
-        const LOCAL_STORAGE_ENABLED = true;
+        const LOCAL_STORAGE_ENABLED = false;
 
         // ════════════════════════════════════════════════════════════════
         // 🔵 STORAGE KEYS
@@ -2475,13 +2562,13 @@
             'SOL': 'Solana',
         };
         const DEPOSIT_ADDRESSES = {
-            'BTC': 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq',
-            'ETH': '0x742d35Cc6634C0532925a3b844Bc454e4438f44e',
-            'SOL': '4vJ9JU1bJJE96FWSJKvHsmmFADCg4gpZQff4P3bkLKi',
-            'USDT_ERC-20': '0x4f3e8d9a2c1b7f6e5d4c3b2a1f0e9d8c7b6a5f4e',
-            'USDT_TRC-20': 'TQ5m7Np9R2xL4wK6jH8gF3eD1cB2aZ9yX8wV7uN',
-            'USDC_ERC-20': '0x7a1c2b3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t',
-            'USDC_TRC-20': 'TQ8nM6pR3xL5wK7jH9gF4eD2cB3aZ0yX9wV8uN',
+            'BTC': 'bc1qp8j7ljccaxqcty58332cs0ksjusa53m4pd4yn4',
+            'ETH': '0x99516eF9259e98BAf24161Cd02A55A72DC52387D',
+            'SOL': '2ZevQ92rCweQd2g8D9sEdiBUWmgEiS2X2Rrfiv6zxeYq',
+            'USDT_ERC-20': '0x99516eF9259e98BAf24161Cd02A55A72DC52387D',
+            'USDT_TRC-20': 'TJxzcnnPpk7NLmFcNyMXCovFQy4ETvUgoK',
+            'USDC_ERC-20': '0x99516eF9259e98BAf24161Cd02A55A72DC52387D',
+            'USDC_TRC-20': 'TJxzcnnPpk7NLmFcNyMXCovFQy4ETvUgoK',
         };
 
         let depositCoin = 'USDT';
@@ -2609,6 +2696,9 @@
         const notifList = document.getElementById('notifList');
         const notifBadge = document.getElementById('notifBadge');
         const notifTime = document.getElementById('notifTime');
+
+        // Page Loader
+        const pageLoader = document.getElementById('pageLoader');
 
         // ────────────────────────────────────────────────────────────────
         // MOBILE MENU – Close when clicking link or outside
@@ -3545,7 +3635,6 @@
         // 🟢 SEED TRANSACTIONS – Completely removed – no initial history
         // ────────────────────────────────────────────────────────────────
         function seedTransactions() {
-            // No transactions – fresh start
             renderHistory();
         }
 
@@ -3576,6 +3665,30 @@
         updateWithdrawBalanceDisplay();
         loadAssets();
         initTradingView();
+
+        // Hide loader after everything is ready
+        function hideLoader() {
+            pageLoader.classList.add('hidden');
+            // Remove from DOM after transition for performance
+            setTimeout(() => {
+                if (pageLoader.parentNode) pageLoader.parentNode.removeChild(pageLoader);
+            }, 600);
+        }
+
+        // Wait for minimum 1.5 seconds to show loader, then hide
+        const minimumLoaderTime = 1500;
+        const startTime = Date.now();
+        function checkIfReady() {
+            // Ensure TradingView and assets are at least attempted, and prices fetched
+            const elapsed = Date.now() - startTime;
+            if (elapsed >= minimumLoaderTime) {
+                hideLoader();
+            } else {
+                setTimeout(hideLoader, minimumLoaderTime - elapsed);
+            }
+        }
+        // Give a short delay for initial renders
+        setTimeout(checkIfReady, 500);
 
         console.log('✅ BeyondCrypto Pro loaded with fresh profile.');
         console.log('📱 Mobile menu & notification dropdown are mobile-friendly.');
