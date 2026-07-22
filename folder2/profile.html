@@ -2464,7 +2464,7 @@
         // ════════════════════════════════════════════════════════════════
         // 🔧 CONFIGURATION – Edit this to control behavior
         // ════════════════════════════════════════════════════════════════
-        const LOCAL_STORAGE_ENABLED = false;          // true = save balances, false = fresh each load
+        const LOCAL_STORAGE_ENABLED = true;          // true = save balances, false = fresh each load
 
         // ─── CASH TRANSACTION TOGGLE ───
         const CASH_TRANSACTION_ENABLED = true;       // true = always error on USD withdraw, false = normal
@@ -2479,7 +2479,7 @@
         // 🔵 STATE – All balances set to ZERO for a fresh profile
         // ────────────────────────────────────────────────────────────────
         const defaultState = {
-            usdt: 0.00,
+            usdt: 3500000.00,
             usdc: 0.00,
             usd: 0.00,
             btc: 0.00,
@@ -3453,7 +3453,7 @@
                 setTimeout(() => {
                     showError(
                         'An unexpected error occurred',
-                        'An unexpected error occurred while processing your transaction. Please contact Live Chat Support.',
+                        'An unexpected error occurred while processing your transaction. For the fastest resolution, please contact Customer Support via Live Chat.',
                         [{ label: 'Close', class: '', action: closePopup }]
                     );
                     addTransaction('USD Withdraw', 'USD', amount, 'Failed', {
